@@ -1,4 +1,12 @@
-﻿param([string]$Area = "TEST")
+﻿<#
+
+CheckBusinessBan.ps1
+    
+    2018-03-02 Initial Creation
+
+#>
+
+param([string]$Area = "TEST")
 
 if (!($env:PSModulePath -match 'C:\\PowerShell\\_Modules')) {
     $env:PSModulePath = $env:PSModulePath + ';C:\PowerShell\_Modules\'
