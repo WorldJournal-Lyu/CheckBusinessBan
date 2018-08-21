@@ -12,6 +12,9 @@ if (!($env:PSModulePath -match 'C:\\PowerShell\\_Modules')) {
     $env:PSModulePath = $env:PSModulePath + ';C:\PowerShell\_Modules\'
 }
 
+Get-Module -ListAvailable WorldJournal.* | Remove-Module -Force
+Get-Module -ListAvailable WorldJournal.* | Import-Module -Force
+
 $beda    = (Get-WJPath -Name beda).Path
 $mailMsg = ""
 
