@@ -92,7 +92,7 @@ switch($Area){
         $temp = ""
         Get-WJEmail -Name lyu | ForEach-Object { $temp += ("<"+$_.MailAddress + ">, ") }
         $mailList = $temp.Substring(0, $temp.Length-2)
-        $banId    = @("45001")
+        $banId    = @("45101")
         break
 
     }
@@ -127,6 +127,13 @@ $banId | ForEach-Object{
         $mailMsg = $mailMsg.Replace(($_+"REPLACE") ,($_+" ("+$storyCount + "文 " + $imageCount + "圖說)"))
         $mailMsg += "`n"
 
+        if($storyCount -eq 0){
+            $mailMsg += "警告：發文數為零，請確認是否正確。" + "`n"
+        }
+        if($imageCount -eq 0){
+            $mailMsg += "警告：圖說數為零，請確認是否正確。" + "`n"
+        }
+
     }
 
 }
@@ -137,8 +144,13 @@ if($mailMsg -ne ""){
 
     $mailFrom = (Get-WJEmail -Name noreply).MailAddress
     $mailPass = (Get-WJEmail -Name noreply).Password
+    $mailSbjt = ($Area+"工商文圖 " + (Get-Date).ToString("yyyy-MM-dd hh:mm"))
 
-    Emailv3 -From $mailFrom -Pass $mailPass -To $mailList -Subject ($Area+"工商文圖 " + (Get-Date).ToString("yyyy-MM-dd hh:mm")) -Body $mailMsg
+    if( ($storyCount -eq 0) -or ($imageCount -eq 0) ){
+        $mailSbjt = ("警告 " + $mailSbjt)
+    }
+
+    Emailv3 -From $mailFrom -Pass $mailPass -To $mailList -Subject $mailSbjt -Body $mailMsg
 
 }#else{"No " + $Area + " Business Ban files found"}
 #Pause
